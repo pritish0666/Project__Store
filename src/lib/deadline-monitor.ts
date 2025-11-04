@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/db";
+import connectDB from "@/lib/db";
 import Project from "@/lib/models/Project";
 
 /**

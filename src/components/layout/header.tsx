@@ -30,12 +30,6 @@ export function Header() {
           >
             Projects
           </Link>
-          <Link
-            href="/collections"
-            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Collections
-          </Link>
           {session?.user?.role === "admin" && (
             <Link
               href="/admin"
@@ -114,13 +108,7 @@ export function Header() {
               >
                 Projects
               </Link>
-              <Link
-                href="/collections"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Collections
-              </Link>
+              
               {session?.user?.role === "admin" && (
                 <Link
                   href="/admin"

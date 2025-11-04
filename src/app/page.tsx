@@ -98,7 +98,7 @@ export default function HomePage() {
               </Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/projects/new">Submit Project</Link>
+              <Link href="/profile/projects/new">Submit Project</Link>
             </Button>
           </div>
         </div>
@@ -236,7 +236,7 @@ export default function HomePage() {
             Join thousands of developers sharing their amazing work
           </p>
           <Button size="lg" variant="secondary" asChild>
-            <Link href="/projects/new">Get Started Today</Link>
+            <Link href="/profile/projects/new">Get Started Today</Link>
           </Button>
         </div>
       </section>

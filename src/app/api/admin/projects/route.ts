@@ -5,8 +5,9 @@ import connectDB from "@/lib/db";
 import Project from "@/lib/models/Project";
 import Review from "@/lib/models/Review";
 import User from "@/lib/models/User";
-import Category from "@/lib/models/Category";
-import Tag from "@/lib/models/Tag";
+// Ensure schemas are registered for population
+import "@/lib/models/Category";
+import "@/lib/models/Tag";
 
 // Helper function to check admin role
 async function checkAdminRole() {

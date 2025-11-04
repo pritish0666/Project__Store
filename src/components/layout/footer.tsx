@@ -32,12 +32,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/collections"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Collections
-                </Link>
+                
               </li>
               <li>
                 <Link
