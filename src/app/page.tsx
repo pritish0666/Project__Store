@@ -9,9 +9,13 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Rating } from "@/components/ui/rating";
-import { ArrowRight, Star, TrendingUp, Users, Code } from "lucide-react";
+import { ArrowRight, Star, Tag, Folder, Code } from "lucide-react";
+import connectDB from "@/lib/db";
+import Project from "@/lib/models/Project";
+import Category from "@/lib/models/Category";
+import TagModel from "@/lib/models/Tag";
 
-// Mock data for featured projects
+// Mock data for featured projects (kept for now; real list is shown on /projects)
 const featuredProjects = [
   {
     id: "1",
@@ -30,6 +34,7 @@ const featuredProjects = [
       { name: "Node.js", color: "#339933" },
     ],
     status: "live",
+    demoUrl: "#",
   },
   {
     id: "2",
@@ -47,6 +52,7 @@ const featuredProjects = [
       { name: "CLI", color: "#6b7280" },
     ],
     status: "live",
+    demoUrl: "#",
   },
   {
     id: "3",
@@ -65,39 +71,64 @@ const featuredProjects = [
       { name: "Python", color: "#3776ab" },
     ],
     status: "live",
+    demoUrl: "#",
   },
 ];
 
-const stats = [
-  { label: "Projects", value: "500+", icon: Code },
-  { label: "Reviews", value: "2.5K+", icon: Star },
-  { label: "Users", value: "1.2K+", icon: Users },
-  { label: "Growth", value: "+25%", icon: TrendingUp },
-];
+export default async function HomePage() {
+  // Query database directly on the server for hero stats
+  await connectDB();
+  const [projectsTotal, categoriesTotal, tagsTotal] = await Promise.all([
+    Project.countDocuments({ status: "live" }),
+    Category.countDocuments({}),
+    TagModel.countDocuments({}),
+  ]);
 
-export default function HomePage() {
+  const stats = [
+    { label: "Projects", value: projectsTotal.toLocaleString(), icon: Code },
+    {
+      label: "Categories",
+      value: categoriesTotal.toLocaleString(),
+      icon: Folder,
+    },
+    { label: "Tags", value: tagsTotal.toLocaleString(), icon: Tag },
+    { label: "Reviews", value: "Live", icon: Star },
+  ];
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20">
+      <section className="relative py-32 px-4 overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-red-50 via-orange-50 to-white dark:from-red-950/20 dark:via-orange-950/10 dark:to-background" />
         <div className="container mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white shadow-sm ring-1 ring-red-200 text-blue-700 dark:bg-red-900/20 dark:text-red-200 dark:ring-red-800 text-xs font-semibold mb-5">
+            <span className="inline-block w-2 h-2 rounded-full bg-blue-500" />
+            Built by developers, for developers
+          </div>
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
             Showcase Your
-            <span className="text-red-500"> Personal Projects</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-orange-500">
+              {" "}
+              Personal Projects
+            </span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Discover, rate, and review amazing personal projects. A Play
             Store-like experience for developers to showcase their work and get
             feedback from the community.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
+            <Button size="lg" className="shadow-md hover:shadow-xl" asChild>
               <Link href="/projects">
                 Browse Projects
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" asChild>
+            <Button
+              variant="outline"
+              size="lg"
+              className="shadow-sm hover:shadow-lg border-2"
+              asChild
+            >
               <Link href="/profile/projects/new">Submit Project</Link>
             </Button>
           </div>
@@ -227,7 +258,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-red-500 text-white">
+      <section className="py-28 px-4 bg-red-500 text-white">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">
             Ready to Showcase Your Project?
@@ -235,7 +266,12 @@ export default function HomePage() {
           <p className="text-xl mb-8 opacity-90">
             Join thousands of developers sharing their amazing work
           </p>
-          <Button size="lg" variant="secondary" asChild>
+          <Button
+            size="lg"
+            variant="secondary"
+            className="shadow-lg hover:shadow-xl font-semibold"
+            asChild
+          >
             <Link href="/profile/projects/new">Get Started Today</Link>
           </Button>
         </div>
