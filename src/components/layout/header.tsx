@@ -40,6 +40,14 @@ export function Header() {
             <span className="font-bold text-xl">Project Hub</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-6">
+            {session && (
+              <Link
+                href="/profile/projects"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Dashboard
+              </Link>
+            )}
             <Link
               href="/projects"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
@@ -119,6 +127,15 @@ export function Header() {
         <div className="md:hidden border-t bg-background">
           <div className="container py-4 space-y-4">
             <nav className="flex flex-col space-y-2">
+              {session && (
+                <Link
+                  href="/profile/projects"
+                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              )}
               <Link
                 href="/projects"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"

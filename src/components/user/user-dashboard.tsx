@@ -234,153 +234,160 @@ export function UserDashboard() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-4">
-          {data?.projects.map((project) => (
-            <Card key={project._id}>
-              <CardContent className="p-6">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold">{project.title}</h3>
-                      <Badge
-                        className={`${getStatusColor(
-                          project.status
-                        )} flex items-center gap-1`}
-                      >
-                        {getStatusIcon(project.status)}
-                        {project.status === "needs-changes"
-                          ? "Needs Changes"
-                          : project.status}
-                      </Badge>
-                    </div>
-                    <p className="text-muted-foreground mb-3">
-                      {project.tagline}
-                    </p>
+         <div className="space-y-8">
+          {/* Needs Changes */}
+          {data?.projects.some((p) => p.status === "needs-changes") && (
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xl font-semibold">Changes Requested</h2>
+                <Badge className="bg-blue-100 text-blue-800">
+                  {data.projects.filter((p) => p.status === "needs-changes").length}
+                </Badge>
+              </div>
+              <div className="space-y-4">
+                {data.projects
+                  .filter((project) => project.status === "needs-changes")
+                  .map((project) => (
+                    <Card key={project._id} className="border-l-4 border-l-blue-400">
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-lg font-semibold">{project.title}</h3>
+                              <Badge className={`${getStatusColor(project.status)} flex items-center gap-1`}>
+                                {getStatusIcon(project.status)} Needs Changes
+                              </Badge>
+                            </div>
+                            <p className="text-muted-foreground mb-3">{project.tagline}</p>
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                              <span>📁 {project.categoryId?.name}</span>
+                              <span>📅 {new Date(project.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            {project.changeRequest && (
+                              <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-3">
+                                <div className="flex items-center justify-between mb-2">
+                                  <h4 className="text-sm font-semibold text-blue-800">Changes Requested:</h4>
+                                  <div className="flex items-center gap-2 text-xs text-blue-600">
+                                    <Clock className="w-3 h-3" />
+                                    <span>Due: {formatDate(project.changeRequest.deadline)}</span>
+                                    <span className={`font-medium ${getDaysUntilDeadline(project.changeRequest.deadline) <= 1 ? "text-red-600" : getDaysUntilDeadline(project.changeRequest.deadline) <= 3 ? "text-orange-600" : "text-green-600"}`}>
+                                      ({getDaysUntilDeadline(project.changeRequest.deadline)} days left)
+                                    </span>
+                                  </div>
+                                </div>
+                                <p className="text-sm text-blue-700 mb-2">{project.changeRequest.feedback}</p>
+                                <p className="text-xs text-blue-600">Requested by {project.changeRequest.requestedBy.name} on {formatDate(project.changeRequest.requestedAt)}</p>
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              asChild
+                              disabled={project.changeRequest && new Date(project.changeRequest.deadline) <= new Date()}
+                              title={project.changeRequest && new Date(project.changeRequest.deadline) <= new Date() ? "Deadline has passed; editing disabled" : undefined}
+                            >
+                              <Link href={`/profile/projects/${project._id}/edit`}>
+                                <Edit className="h-4 w-4" />
+                              </Link>
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </div>
+            </section>
+          )}
 
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                      <span>📁 {project.categoryId?.name}</span>
-                      <div className="flex gap-1">
-                        {project.tagIds.slice(0, 3).map((tag) => (
-                          <Badge
-                            key={tag._id}
-                            variant="outline"
-                            className="text-xs"
-                          >
-                            {tag.name}
-                          </Badge>
-                        ))}
-                        {project.tagIds.length > 3 && (
-                          <span className="text-xs">
-                            +{project.tagIds.length - 3} more
-                          </span>
-                        )}
-                      </div>
-                      <span>
-                        📅 {new Date(project.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
-
-                    {/* Change Request */}
-                    {project.status === "needs-changes" &&
-                      project.changeRequest && (
-                        <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-3">
-                          <div className="flex items-center justify-between mb-2">
-                            <h4 className="text-sm font-semibold text-blue-800">
-                              Changes Requested:
-                            </h4>
-                            <div className="flex items-center gap-2 text-xs text-blue-600">
-                              <Clock className="w-3 h-3" />
-                              <span>
-                                Due:{" "}
-                                {formatDate(project.changeRequest.deadline)}
-                              </span>
-                              <span
-                                className={`font-medium ${
-                                  getDaysUntilDeadline(
-                                    project.changeRequest.deadline
-                                  ) <= 1
-                                    ? "text-red-600"
-                                    : getDaysUntilDeadline(
-                                        project.changeRequest.deadline
-                                      ) <= 3
-                                    ? "text-orange-600"
-                                    : "text-green-600"
-                                }`}
-                              >
-                                (
-                                {getDaysUntilDeadline(
-                                  project.changeRequest.deadline
-                                )}{" "}
-                                days left)
-                              </span>
+          {/* Pending */}
+          {data?.projects.some((p) => p.status === "pending") && (
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xl font-semibold">Pending Review</h2>
+                <Badge className="bg-yellow-100 text-yellow-800">
+                  {data.projects.filter((p) => p.status === "pending").length}
+                </Badge>
+              </div>
+              <div className="space-y-4">
+                {data.projects
+                  .filter((project) => project.status === "pending")
+                  .map((project) => (
+                    <Card key={project._id} className="border-l-4 border-l-yellow-400">
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-lg font-semibold">{project.title}</h3>
+                              <Badge className={`${getStatusColor(project.status)} flex items-center gap-1`}>
+                                {getStatusIcon(project.status)} Pending
+                              </Badge>
+                            </div>
+                            <p className="text-muted-foreground mb-3">{project.tagline}</p>
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                              <span>📁 {project.categoryId?.name}</span>
+                              <span>📅 {new Date(project.createdAt).toLocaleDateString()}</span>
                             </div>
                           </div>
-                          <p className="text-sm text-blue-700 mb-2">
-                            {project.changeRequest.feedback}
-                          </p>
-                          <p className="text-xs text-blue-600">
-                            Requested by{" "}
-                            {project.changeRequest.requestedBy.name} on{" "}
-                            {formatDate(project.changeRequest.requestedAt)}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm" asChild>
+                              <Link href={`/profile/projects/${project._id}/edit`}>
+                                <Edit className="h-4 w-4" />
+                              </Link>
+                            </Button>
+                          </div>
                         </div>
-                      )}
+                      </CardContent>
+                    </Card>
+                  ))}
+              </div>
+            </section>
+          )}
 
-                    {/* Admin Feedback */}
-                    {project.status === "rejected" &&
-                      project.rejectionReason && (
-                        <div className="bg-red-50 border border-red-200 rounded-md p-3 mb-3">
-                          <h4 className="text-sm font-semibold text-red-800 mb-1">
-                            Rejection Reason:
-                          </h4>
-                          <p className="text-sm text-red-700">
-                            {project.rejectionReason}
-                          </p>
+          {/* Live */}
+          {data?.projects.some((p) => p.status === "live") && (
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-xl font-semibold">Live Projects</h2>
+                <Badge className="bg-green-100 text-green-800">
+                  {data.projects.filter((p) => p.status === "live").length}
+                </Badge>
+              </div>
+              <div className="space-y-4">
+                {data.projects
+                  .filter((project) => project.status === "live")
+                  .map((project) => (
+                    <Card key={project._id} className="border-l-4 border-l-green-400">
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-lg font-semibold">{project.title}</h3>
+                              <Badge className={`${getStatusColor(project.status)} flex items-center gap-1`}>
+                                {getStatusIcon(project.status)} Live
+                              </Badge>
+                            </div>
+                            <p className="text-muted-foreground mb-3">{project.tagline}</p>
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                              <span>📁 {project.categoryId?.name}</span>
+                              <span>📅 {new Date(project.createdAt).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm" asChild>
+                              <Link href={`/projects/${project.slug}`}>
+                                <Eye className="h-4 w-4" />
+                              </Link>
+                            </Button>
+                          </div>
                         </div>
-                      )}
-
-                    {project.adminNotes && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-3">
-                        <h4 className="text-sm font-semibold text-blue-800 mb-1">
-                          Admin Notes:
-                        </h4>
-                        <p className="text-sm text-blue-700">
-                          {project.adminNotes}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    {project.status === "live" && (
-                      <Button variant="outline" size="sm" asChild>
-                        <Link href={`/projects/${project.slug}`}>
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                    )}
-                    {(project.status === "pending" ||
-                      project.status === "needs-changes" ||
-                      project.status === "rejected") && (
-                      <Button variant="outline" size="sm" asChild>
-                        <Link href={`/profile/projects/${project._id}/edit`}>
-                          <Edit className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                    )}
-                    {project.status === "rejected" && (
-                      <Button variant="outline" size="sm" asChild>
-                        <Link href="/profile/projects/new">
-                          <Plus className="h-4 w-4 mr-1" />
-                          New Project
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                      </CardContent>
+                    </Card>
+                  ))}
+              </div>
+            </section>
+          )}
         </div>
       )}
 

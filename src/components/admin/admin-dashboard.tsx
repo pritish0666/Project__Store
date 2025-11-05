@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
   Users,
@@ -130,8 +131,8 @@ export function AdminDashboard() {
                   Review and approve pending reviews to keep the community safe.
                 </p>
               </div>
-              <Button variant="outline" size="sm">
-                Review Now
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/admin/reviews">Review Now</Link>
               </Button>
             </div>
           </CardContent>
@@ -175,8 +176,8 @@ export function AdminDashboard() {
                   >
                     {project.status}
                   </Badge>
-                  <Button variant="outline" size="sm">
-                    Edit
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={`/admin/projects/${project._id}/edit`}>Edit</Link>
                   </Button>
                 </div>
               </div>
@@ -192,13 +193,17 @@ export function AdminDashboard() {
             <CardTitle className="text-lg">Projects</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start">
+            <Button className="w-full justify-start" asChild>
+              <Link href="/admin/projects">
               <FolderOpen className="h-4 w-4 mr-2" />
               Manage Projects
+              </Link>
             </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <FolderOpen className="h-4 w-4 mr-2" />
-              Add New Project
+            <Button variant="outline" className="w-full justify-start" asChild>
+              <Link href="/admin/projects/new">
+                <FolderOpen className="h-4 w-4 mr-2" />
+                Add New Project
+              </Link>
             </Button>
           </CardContent>
         </Card>
@@ -208,32 +213,16 @@ export function AdminDashboard() {
             <CardTitle className="text-lg">Reviews</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start">
-              <Star className="h-4 w-4 mr-2" />
-              Moderate Reviews
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <AlertCircle className="h-4 w-4 mr-2" />
-              View Reports
+            <Button className="w-full justify-start" asChild>
+              <Link href="/admin/reviews">
+                <Star className="h-4 w-4 mr-2" />
+                Moderate Reviews
+              </Link>
             </Button>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Analytics</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Button className="w-full justify-start">
-              <TrendingUp className="h-4 w-4 mr-2" />
-              View Analytics
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              <Eye className="h-4 w-4 mr-2" />
-              Export Data
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Optional: Add Analytics card later when implemented */}
       </div>
     </div>
   );

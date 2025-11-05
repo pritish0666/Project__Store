@@ -3,15 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import {
-  LayoutDashboard,
-  FolderOpen,
-  MessageSquare,
-  Users,
-  Settings,
-  Tag,
-  Folder,
-} from "lucide-react";
+import { LayoutDashboard, FolderOpen, MessageSquare, Users, Settings } from "lucide-react";
 
 const adminNavItems = [
   {
@@ -34,21 +26,8 @@ const adminNavItems = [
     href: "/admin/users",
     icon: Users,
   },
-  {
-    title: "Categories",
-    href: "/admin/categories",
-    icon: Folder,
-  },
-  {
-    title: "Tags",
-    href: "/admin/tags",
-    icon: Tag,
-  },
-  {
-    title: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
-  },
+  // Settings is optional; keep the entry, but only show if the route exists/needed later
+  // { title: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
 export function AdminNavigation() {

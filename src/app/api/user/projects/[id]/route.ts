@@ -86,6 +86,29 @@ export async function PUT(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
+    // Guard: only allow edit when status is pending or needs-changes (and not past deadline)
+    if (
+      existingProject.status !== "pending" &&
+      existingProject.status !== "needs-changes"
+    ) {
+      return NextResponse.json(
+        { error: "Edits are allowed only for pending or needs-changes projects" },
+        { status: 400 }
+      );
+    }
+
+    if (
+      existingProject.status === "needs-changes" &&
+      existingProject.changeRequest?.deadline &&
+      new Date(existingProject.changeRequest.deadline).getTime() <=
+        new Date().getTime()
+    ) {
+      return NextResponse.json(
+        { error: "Change request deadline has passed. Editing disabled." },
+        { status: 400 }
+      );
+    }
+
     // Generate new slug if title changed
     let slug = existingProject.slug;
     if (title && title !== existingProject.title) {
