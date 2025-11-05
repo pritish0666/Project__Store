@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,7 +25,8 @@ const featuredProjects = [
     tagline: "AI-powered project management tool",
     description:
       "A comprehensive project management application with AI-driven insights and team collaboration features.",
-    heroImage: "/api/placeholder/400/300",
+    heroImage:
+      "https://imgs.search.brave.com/GG3BEkpWHIkmdM_CXdjUqikwHMMzIASAcLpGVBd_X_Y/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTk3/NjA5OTY2NC9waG90/by9hcnRpZmljaWFs/LWludGVsbGlnZW5j/ZS1wcm9jZXNzb3It/Y29uY2VwdC1haS1i/aWctZGF0YS1hcnJh/eS5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9clR0V1A5eXd4/Wk1fQnlnelVSaWtk/b1dSSG5PNG9oRDcz/Wi1SREFnX3U4TT0",
     avgRating: 4.8,
     ratingsCount: 124,
     category: { name: "Web Applications", color: "#ef4444" },
@@ -43,7 +45,8 @@ const featuredProjects = [
     tagline: "Essential tools for developers",
     description:
       "A collection of productivity tools including code formatters, validators, and generators.",
-    heroImage: "/api/placeholder/400/300",
+    heroImage:
+      "https://imgs.search.brave.com/nKLl_lgQWYshrGpQ__qjBLTb9aqxQNb-RMaFht3_eWc/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by9w/ZXJzb24td2Vhcmlu/Zy1oaWdoLXRlY2gt/dnItZ2xhc3Nlcy13/aGlsZS1zdXJyb3Vu/ZGVkLWJ5LWJyaWdo/dC1ibHVlLW5lb24t/Y29sb3JzXzIzLTIx/NTEyNTUxMjkuanBn/P3NlbXQ9YWlzX2h5/YnJpZCZ3PTc0MCZx/PTgw",
     avgRating: 4.6,
     ratingsCount: 89,
     category: { name: "Developer Tools", color: "#3b82f6" },
@@ -61,7 +64,8 @@ const featuredProjects = [
     tagline: "Beautiful data visualization platform",
     description:
       "Create stunning interactive charts and dashboards with real-time data integration.",
-    heroImage: "/api/placeholder/400/300",
+    heroImage:
+      "https://imgs.search.brave.com/4-C5b0_ZU7sx7vJaTZxdc7ZvInOr-0E8BaWpXMLVDuw/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMjE1/NTc2OTU1NS9waG90/by9hcnRpZmljaWFs/LWludGVsbGlnZW5j/ZS1jb25jZXB0LWNw/dS1xdWFudHVtLWNv/bXB1dGluZy5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9WXR4/RnVkc01YOVpDVmpk/Yml4ZERFTTRjSjV4/b3RNbjVnNWdnR0Jl/amdmcz0",
     avgRating: 4.9,
     ratingsCount: 156,
     category: { name: "Data Visualization", color: "#10b981" },
@@ -101,8 +105,10 @@ export default async function HomePage() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-br from-red-50 via-orange-50 to-white dark:from-red-950/20 dark:via-orange-950/10 dark:to-background" />
         <div className="container mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white shadow-sm ring-1 ring-red-200 text-blue-700 dark:bg-red-900/20 dark:text-red-200 dark:ring-red-800 text-xs font-semibold mb-5">
-            <span className="inline-block w-2 h-2 rounded-full bg-blue-500" />
-            Built by developers, for developers
+            <span className="inline-block w-2 h-2 rounded-full bg-red-500" />
+            <p className="text-sm text-red-700">
+              Built by developers, for developers
+            </p>
           </div>
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
             Showcase Your
@@ -169,9 +175,11 @@ export default async function HomePage() {
                 className="group hover:shadow-lg transition-shadow"
               >
                 <div className="aspect-video overflow-hidden rounded-t-lg">
-                  <img
+                  <Image
                     src={project.heroImage}
                     alt={project.title}
+                    width={800}
+                    height={600}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
@@ -269,7 +277,7 @@ export default async function HomePage() {
           <Button
             size="lg"
             variant="secondary"
-            className="shadow-lg hover:shadow-xl font-semibold"
+            className="shadow-lg hover:shadow-xl font-semibold border-2 border-white/80"
             asChild
           >
             <Link href="/profile/projects/new">Get Started Today</Link>

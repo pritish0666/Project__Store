@@ -4,13 +4,29 @@ import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { User, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function Header() {
   const { data: session, status } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isAdmin =
     (session?.user as { role?: string } | undefined)?.role === "admin";
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (
+        isUserMenuOpen &&
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target as Node)
+      ) {
+        setIsUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, [isUserMenuOpen]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -46,29 +62,29 @@ export function Header() {
           {status === "loading" ? (
             <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
           ) : session ? (
-            <div className="relative">
+            <div className="relative" ref={userMenuRef}>
               <Button
                 variant="ghost"
                 size="sm"
                 className="flex items-center space-x-2"
-                onClick={() => setIsMobileMenuOpen((v) => !v)}
+                onClick={() => setIsUserMenuOpen((v) => !v)}
               >
                 <User className="h-4 w-4" />
                 <span className="hidden sm:inline">{session.user?.name}</span>
               </Button>
-              {isMobileMenuOpen && (
+              {isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-40 rounded-md border bg-background shadow-sm py-1">
                   <Link
                     href="/profile"
                     className="block px-3 py-2 text-sm hover:bg-accent"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    onClick={() => setIsUserMenuOpen(false)}
                   >
                     Profile
                   </Link>
                   <button
                     className="block w-full text-left px-3 py-2 text-sm hover:bg-accent"
                     onClick={() => {
-                      setIsMobileMenuOpen(false);
+                      setIsUserMenuOpen(false);
                       signOut();
                     }}
                   >
