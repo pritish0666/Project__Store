@@ -12,7 +12,7 @@ export default function SignInPage() {
           </div>
           <h2 className="mt-6 text-3xl font-bold">Sign in to Project Hub</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Access your account to manage projects and reviews
+            Access your account to manage projects and reviews here at Project Hub where you can showcase your personal projects and get feedback from the community.
           </p>
         </div>
 
